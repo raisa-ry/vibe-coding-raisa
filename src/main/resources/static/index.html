@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HikePack AI — Smart Gear for Every Trail</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <span class="logo">&#x1F3D4;&#xFE0F; HikePack AI</span>
+        <p class="tagline">AI-powered gear lists with safety "what-if" scenarios</p>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="app-layout">
+
+            <!-- ========== FORM PANEL ========== -->
+            <aside class="form-panel">
+                <form id="trip-form" novalidate>
+
+                    <section class="form-section">
+                        <h2>&#x1F553; Trip Duration</h2>
+                        <div class="duration-toggle">
+                            <label class="toggle-option">
+                                <input type="radio" name="durationType" value="hours" checked>
+                                <span>Hours</span>
+                            </label>
+                            <label class="toggle-option">
+                                <input type="radio" name="durationType" value="days">
+                                <span>Days</span>
+                            </label>
+                        </div>
+                        <div class="input-group">
+                            <input type="number" id="durationValue" min="1" max="30" value="4"
+                                   class="number-input" required>
+                            <span class="input-suffix" id="duration-suffix">hours</span>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>&#x1F321;&#xFE0F; Temperature Range</h2>
+                        <div class="temp-inputs">
+                            <div class="temp-field">
+                                <label for="tempMin">Low</label>
+                                <input type="number" id="tempMin" value="45" min="-40" max="120">
+                                <span>°F</span>
+                            </div>
+                            <div class="temp-arrow">&#x2192;</div>
+                            <div class="temp-field">
+                                <label for="tempMax">High</label>
+                                <input type="number" id="tempMax" value="72" min="-40" max="120">
+                                <span>°F</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>&#x26C5; Weather Conditions</h2>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-card">
+                                <input type="checkbox" id="hasRain">
+                                <span class="cb-icon">&#x1F327;&#xFE0F;</span>
+                                <span class="cb-label">Rain</span>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" id="hasWind">
+                                <span class="cb-icon">&#x1F4A8;</span>
+                                <span class="cb-label">Wind</span>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" id="hasSnow">
+                                <span class="cb-icon">&#x2744;&#xFE0F;</span>
+                                <span class="cb-label">Snow/Ice</span>
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" id="hasHeat">
+                                <span class="cb-icon">&#x2600;&#xFE0F;</span>
+                                <span class="cb-label">Extreme Heat</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>&#x1F5FA;&#xFE0F; Terrain</h2>
+                        <select id="terrain" class="select-input">
+                            <option value="Well-marked trail">Well-marked trail</option>
+                            <option value="Mountain / scramble">Mountain / scramble</option>
+                            <option value="Desert">Desert</option>
+                            <option value="Forest / jungle">Forest / jungle</option>
+                            <option value="Mixed backcountry">Mixed backcountry</option>
+                            <option value="Coastal / beach">Coastal / beach</option>
+                        </select>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>&#x1F4AA; Experience Level</h2>
+                        <select id="fitnessLevel" class="select-input">
+                            <option value="Beginner (first few hikes)">Beginner</option>
+                            <option value="Intermediate (regular day hiker)" selected>Intermediate</option>
+                            <option value="Experienced (multi-day trips, some scrambling)">Experienced</option>
+                            <option value="Expert (technical mountaineering, long solo trips)">Expert</option>
+                        </select>
+                    </section>
+
+                    <button type="submit" id="generate-btn" class="generate-btn">
+                        <span class="btn-text">Generate My Pack List</span>
+                        <span class="btn-arrow">&#x2192;</span>
+                    </button>
+                </form>
+            </aside>
+
+            <!-- ========== RESULTS PANEL ========== -->
+            <div class="results-panel" id="results-panel">
+
+                <!-- Empty state -->
+                <div class="state-card" id="empty-state">
+                    <div class="state-icon">&#x1F392;</div>
+                    <h3>Ready to pack smart?</h3>
+                    <p>Fill in your trip details and get a personalised gear list with AI-powered safety scenarios for every "what if".</p>
+                </div>
+
+                <!-- Loading state -->
+                <div class="state-card" id="loading-state" hidden>
+                    <div class="spinner"></div>
+                    <p class="loading-text">Crafting your perfect pack list&hellip;</p>
+                </div>
+
+                <!-- Error state -->
+                <div class="state-card" id="error-state" hidden>
+                    <div class="state-icon">&#x26A0;&#xFE0F;</div>
+                    <h3>Something went wrong</h3>
+                    <p id="error-message" class="error-msg"></p>
+                    <button onclick="resetToEmpty()" class="retry-btn">Try Again</button>
+                </div>
+
+                <!-- Results -->
+                <div id="results-content" hidden>
+                    <div class="results-header">
+                        <h2>Your Pack List</h2>
+                        <p class="trip-summary" id="trip-summary"></p>
+                    </div>
+
+                    <div class="print-header">
+                        <h1>&#x1F3D4;&#xFE0F; HikePack AI — Gear Checklist</h1>
+                        <p id="print-summary"></p>
+                    </div>
+
+                    <div class="categories-grid" id="categories"></div>
+
+                    <div class="section-block">
+                        <div class="section-title">
+                            <span>&#x26A0;&#xFE0F;</span>
+                            <div>
+                                <h2>What-If Safety Scenarios</h2>
+                                <p class="section-sub">Extra gear &amp; actions for the unexpected</p>
+                            </div>
+                        </div>
+                        <div class="scenarios-list" id="whatif-scenarios"></div>
+                    </div>
+
+                    <div class="section-block">
+                        <div class="section-title">
+                            <span>&#x1F4A1;</span>
+                            <div>
+                                <h2>Pro Tips</h2>
+                                <p class="section-sub">Tailored advice for your trip</p>
+                            </div>
+                        </div>
+                        <div class="tips-grid" id="tips-list"></div>
+                    </div>
+
+                    <div class="action-bar no-print">
+                        <button onclick="copyShareLink()" class="action-btn share-btn">
+                            &#x1F517; Copy Share Link
+                        </button>
+                        <button onclick="window.print()" class="action-btn print-btn">
+                            &#x1F5A8;&#xFE0F; Print Checklist
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
