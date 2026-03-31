@@ -71,16 +71,32 @@ public class PackListService {
         if (input.isHasHeat()) conditions.add("extreme heat");
         String condStr = conditions.isEmpty() ? "clear/mild" : String.join(", ", conditions);
 
-        return """
+        String locationBlock = "";
+        if (input.getLocationName() != null && !input.getLocationName().isBlank()) {
+            locationBlock = "- Location: " + input.getLocationName()
+                    + " at " + input.getElevationFt() + " ft elevation\n"
+                    + "- Weather context: " + input.getWeatherSummary() + "\n"
+                    + (input.getTripDate() != null && !input.getTripDate().isBlank()
+                        ? "- Trip date: " + input.getTripDate() + "\n" : "");
+        }
+
+        return ("""
                 You are an expert wilderness guide and gear specialist.
                 Generate a comprehensive, practical hiking pack list tailored to these trip details.
 
                 TRIP DETAILS:
-                - Duration: %d %s
+                %s- Duration: %d %s
                 - Temperature range: %d°F to %d°F
                 - Weather conditions: %s
                 - Terrain: %s
-                - Hiker experience: %s
+                - Hiker experience: %s""").formatted(
+                locationBlock,
+                input.getDurationValue(), input.getDurationType(),
+                input.getTempMin(), input.getTempMax(),
+                condStr,
+                input.getTerrain(),
+                input.getFitnessLevel()
+        ) + """
 
                 Respond with ONLY valid JSON — no markdown, no explanation, no code blocks.
                 Your response must start with { and end with }.
@@ -109,13 +125,7 @@ public class PackListService {
                 Required what-if scenarios: Cold Snap (sudden 20°F+ temperature drop), Sudden Storm, Injury or Medical Emergency, Getting Lost.
                 Include 4–6 tips specific to this trip's conditions and terrain.
                 Scale quantities and item specificity to the trip duration and conditions.
-                """.formatted(
-                input.getDurationValue(), input.getDurationType(),
-                input.getTempMin(), input.getTempMax(),
-                condStr,
-                input.getTerrain(),
-                input.getFitnessLevel()
-        );
+                """;
     }
 
     private String extractJson(String text) {

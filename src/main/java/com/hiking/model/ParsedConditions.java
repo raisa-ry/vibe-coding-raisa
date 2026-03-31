@@ -1,8 +1,11 @@
 package com.hiking.model;
 
-public class TripInput {
-    private String durationType;   // "hours" or "days"
+public class ParsedConditions {
+
+    private String locationName;
+    private String tripDate;
     private int durationValue;
+    private String durationType;
     private int tempMin;
     private int tempMax;
     private boolean hasRain;
@@ -12,11 +15,17 @@ public class TripInput {
     private String terrain;
     private String fitnessLevel;
 
-    public String getDurationType() { return durationType; }
-    public void setDurationType(String durationType) { this.durationType = durationType; }
+    public String getLocationName() { return locationName; }
+    public void setLocationName(String locationName) { this.locationName = locationName; }
+
+    public String getTripDate() { return tripDate; }
+    public void setTripDate(String tripDate) { this.tripDate = tripDate; }
 
     public int getDurationValue() { return durationValue; }
     public void setDurationValue(int durationValue) { this.durationValue = durationValue; }
+
+    public String getDurationType() { return durationType; }
+    public void setDurationType(String durationType) { this.durationType = durationType; }
 
     public int getTempMin() { return tempMin; }
     public void setTempMin(int tempMin) { this.tempMin = tempMin; }
@@ -41,29 +50,4 @@ public class TripInput {
 
     public String getFitnessLevel() { return fitnessLevel; }
     public void setFitnessLevel(String fitnessLevel) { this.fitnessLevel = fitnessLevel; }
-
-    private String tripDate;
-    private String locationName;
-    private double latitude;
-    private double longitude;
-    private int elevationFt;
-    private String weatherSummary;
-
-    public String getTripDate() { return tripDate; }
-    public void setTripDate(String tripDate) { this.tripDate = tripDate; }
-
-    public String getLocationName() { return locationName; }
-    public void setLocationName(String locationName) { this.locationName = locationName; }
-
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
-
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
-
-    public int getElevationFt() { return elevationFt; }
-    public void setElevationFt(int elevationFt) { this.elevationFt = elevationFt; }
-
-    public String getWeatherSummary() { return weatherSummary; }
-    public void setWeatherSummary(String weatherSummary) { this.weatherSummary = weatherSummary; }
 }
